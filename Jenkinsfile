@@ -11,9 +11,9 @@ pipeline {
         git 'https://github.com/nathanielremy/Dockages.git'
       }
     }
-    stage('Building artifact') {
+    stage('Copying artifact') {
       steps{
-        // ...
+	copyArtifacts filter: 'myGo2HWmoms_master', fingerprintArtifacts: true, projectName: 'myGo2HWmoms/master', selector: lastSuccessful()
       }
     }
     stage('Building image') {
