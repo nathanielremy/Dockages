@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Building artifact') {
       steps{
-        
+        // ...
       }
     }
     stage('Building image') {
