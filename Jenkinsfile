@@ -11,6 +11,11 @@ pipeline {
         git 'https://github.com/nathanielremy/Dockages.git'
       }
     }
+    stage('Building artifact') {
+      steps{
+        
+      }
+    }
     stage('Building image') {
       steps{
         script {
@@ -18,7 +23,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy Image') {
+    stage('Deploying image') {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
@@ -27,7 +32,7 @@ pipeline {
         }
       }
     }
-    /*stage('Remove Unused docker image') {
+    /*stage('Remove unused docker image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
       }
