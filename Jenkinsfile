@@ -1,41 +1,23 @@
 pipeline {
-  environment {
-    registry = "nathanielremy/dockager"
-    registryCredential = 'DockerHub-Devops'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Cloning Git') {
-      steps {
-        git 'https://github.com/nathanielremy/Dockages.git'
-      }
-    }
-    stage('Copying artifact') {
-      steps{
-	copyArtifacts filter: 'myGo2HWmoms_master', fingerprintArtifacts: true, projectName: 'myGo2HWmoms/master', selector: lastSuccessful()
-      }
-    }
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+	agent any
+    tools {
+        go {'go'}
         }
-      }
-    }
-    stage('Deploying image') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
+    stages {
+	stage('test') { 
+            steps{
+                sh 'go test'
+            }
+        }        
+        stage('Build') { 
+            steps{
+                sh 'go build'
+            }
+        }        
+        stage('Publish artefact') {
+            steps{
+                archiveArtifacts 'myGo2HWmoms_master'
+            }
         }
-      }
     }
-    /*stage('Remove unused docker image') {
-      steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }*/
-  }
 }
